@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Streaming</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #333;
+            color: white;
+        }
+        #videoContainer {
+            position: relative;
+            width: 80%;
+            max-width: 800px;
+            background-color: black;
+        }
+        #offlineImage {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+        #shareBtn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        #shareBtn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div id="videoContainer">
+    <video id="video" width="100%" controls>
+        <!-- Reemplaza con tu URL de streaming -->
+        <source src="tu_streaming_url_aqui" type="video/mp4">
+        Tu navegador no soporta HTML5 video.
+    </video>
+    <img id="offlineImage" src="imagen_offline.jpg" alt="Transmisión no disponible">
+</div>
+
+<button id="shareBtn">Compartir Transmisión</button>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const video = document.getElementById('video');
+        const offlineImage = document.getElementById('offlineImage');
+
+        video.onerror = function () {
+            offlineImage.style.display = 'block';
+        };
+
+        video.oncanplay = function () {
+            offlineImage.style.display = 'none';
+        };
+
+        const shareBtn = document.getElementById('shareBtn');
+        shareBtn.addEventListener('click', async function () {
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'Mira esta transmisión en vivo',
+                        url: window.location.href
+                    });
+                    console.log('Transmisión compartida con éxito');
+                } catch (err) {
+                    console.error('Error al compartir:', err);
+                }
+            } else {
+                alert('Tu navegador no soporta la funcionalidad de compartir.');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
